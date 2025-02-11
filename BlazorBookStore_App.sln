@@ -3,7 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorBookStore_App", "BlazorBookStore_App.csproj", "{1E53F0C8-2D36-4E24-A9D0-AC44035DF135}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorBookStore_App", "BlazorBookStore_App.csproj", "{1E53F0C8-2D36-4E24-A9D0-AC44035DF135}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{253C16E0-3BA9-408C-9266-7DE1FF40CAF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMMON", "..\COMMON\COMMON.csproj", "{267E70F6-B4ED-4817-AB2A-1CA4F3A0C24F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SERVICE", "..\SERVICE\SERVICE.csproj", "{0388FC3F-D640-4C76-BB51-0F04D205B4D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Projections", "Projections", "{1374F808-AFF3-4F08-85FD-A1108991DBB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D70DE4C2-4AC0-4F40-A273-8F44703E1068}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +28,18 @@ Global
 		{1E53F0C8-2D36-4E24-A9D0-AC44035DF135}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E53F0C8-2D36-4E24-A9D0-AC44035DF135}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E53F0C8-2D36-4E24-A9D0-AC44035DF135}.Release|Any CPU.Build.0 = Release|Any CPU
+		{253C16E0-3BA9-408C-9266-7DE1FF40CAF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{253C16E0-3BA9-408C-9266-7DE1FF40CAF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{253C16E0-3BA9-408C-9266-7DE1FF40CAF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{253C16E0-3BA9-408C-9266-7DE1FF40CAF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{267E70F6-B4ED-4817-AB2A-1CA4F3A0C24F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{267E70F6-B4ED-4817-AB2A-1CA4F3A0C24F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{267E70F6-B4ED-4817-AB2A-1CA4F3A0C24F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{267E70F6-B4ED-4817-AB2A-1CA4F3A0C24F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0388FC3F-D640-4C76-BB51-0F04D205B4D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0388FC3F-D640-4C76-BB51-0F04D205B4D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0388FC3F-D640-4C76-BB51-0F04D205B4D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0388FC3F-D640-4C76-BB51-0F04D205B4D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

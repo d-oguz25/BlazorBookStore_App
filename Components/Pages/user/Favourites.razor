@@ -1,0 +1,45 @@
+﻿@page "/favourites"
+@using BlazorBookStore_App.Components.Models
+@using BlazorBookStore_App.Components.Services
+
+@inject FavouriteBooksState favouriteBooksState
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Favorite Books</h2>
+    @if (favouriteBooksState.FavouriteBooks.Any())
+    {
+        <div class="row">
+            @foreach (var book in favouriteBooksState.FavouriteBooks)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="@book.ImageUrl" class="card-img-top" alt="@book.Title" />
+                        <div class="card-body">
+                            <h5 class="card-title">@book.Title</h5>
+                            <p class="card-text text-muted">@book.Author</p>
+                            <p class="card-text">@book.Description</p>
+                            <button class="btn btn-danger" @onclick="() => RemoveFromFavorites(book)">Remove from Favorite</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No books in your favorites.</p>
+    }
+</div>
+
+@code {
+
+
+
+
+
+    private void RemoveFromFavorites(BookModel book){
+        favouriteBooksState.FavouriteBooks.Remove(book);
+
+    }
+
+}

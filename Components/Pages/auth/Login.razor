@@ -1,0 +1,60 @@
+﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@using BlazorBookStore_App.Components.Models
+@using COMMON.Models
+@using SERVICE.Contracts
+@using static SERVICE.Contracts.AuthUserEngine
+
+<h3>Login</h3>
+@inject UserState userState
+@inject AuthUserEngine userEngine
+@inject ILocalStorageService localStorage
+
+
+
+<EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator /> 
+    <ValidationSummary />
+
+    <div> 
+        <label for="username">Kullanıcı Adı:</label>
+        <InputText id="username" @bind-Value="loginModel.UserName" class="form-control" />
+        <ValidationMessage For="@(() => loginModel.UserName)" />
+    </div>
+
+    <div>
+        <label for="password">Şifre:</label>
+        <InputText id="password" type="password" @bind-Value="loginModel.Password" class="form-control" />
+        <ValidationMessage For="@(() => loginModel.Password)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+</EditForm>
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private LoggedUser loginModel = new();
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        LoginUser currentUser = userEngine.Login(loginModel);
+        if(currentUser.loggedUser.IsAuthenticated){
+
+       userState.SetUser(currentUser.loggedUser);   
+        }
+       
+
+        await localStorage.SetItemAsync("user", "");
+    }
+
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+
+}
+
+

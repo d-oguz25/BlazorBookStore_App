@@ -1,0 +1,96 @@
+﻿@page "/register"
+@using BlazorBookStore_App.Components.Models
+@using System.ComponentModel.DataAnnotations
+<h3>Register</h3>
+
+<EditForm Model="@userModel" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label for="username">Kullanıcı Adı:</label>
+        <InputText id="username" @bind-Value="userModel.Username" class="form-control" />
+        <ValidationMessage For="@(() => userModel.Username)" />
+    </div>
+    <div>
+        <label for="firstName">Adı:</label>
+        <InputText id="firstName" @bind-Value="userModel.FirstName" class="form-control" />
+        <ValidationMessage For="@(() => userModel.FirstName)" />
+    </div>
+    <div>
+        <label for="lastName">Soyadı:</label>
+        <InputText id="lastName" @bind-Value="userModel.LastName" class="form-control" />
+        <ValidationMessage For="@(() => userModel.LastName)" />
+    </div>
+    <div>
+        <label for="dateOfBirth">Doğum Tarihi:</label>
+        <InputDate id="dateOfBirth" @bind-Value="userModel.DateOfBirth" class="form-control" />
+        <ValidationMessage For="@(() => userModel.DateOfBirth)" />
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <InputText id="email" @bind-Value="userModel.Email" class="form-control" />
+        <ValidationMessage For="@(() => userModel.Email)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</EditForm>
+
+@code {
+    [Inject]
+    public HttpClient httpclient { get; set; }
+
+    // Kullanıcı Modeli
+    UserModel userModel = new();
+
+    private async Task HandleSubmit()
+    {
+        try
+        {
+            // Kullanıcı Modelini JSON formatına çevir
+            var jsonContent = new StringContent(
+                System.Text.Json.JsonSerializer.Serialize(userModel),
+                System.Text.Encoding.UTF8,
+                "application/json"
+            );
+
+            // HTTP POST isteği gönder
+            var response = await httpclient.PostAsync("Auth/Register", jsonContent);
+
+            // Yanıtın durumunu kontrol et
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Kayıt başarılı!");
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Hata: {errorMessage}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+        }
+    }
+
+    // Kullanıcı Modeli Sınıfı
+    public class UserModel
+    {
+        [Required(ErrorMessage = "Kullanıcı adı gereklidir.")]
+        public string Username { get; set; }
+
+        [Required(ErrorMessage = "Ad gereklidir.")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Soyad gereklidir.")]
+        public string LastName { get; set; }
+
+        [Required(ErrorMessage = "Doğum tarihi gereklidir.")]
+        [DataType(DataType.Date)]
+        public DateTime DateOfBirth { get; set; }
+
+        [Required(ErrorMessage = "Email gereklidir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz.")]
+        public string Email { get; set; }
+    }
+}
