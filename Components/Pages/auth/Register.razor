@@ -1,7 +1,9 @@
 ﻿@page "/register"
 @using BlazorBookStore_App.Components.Models
 @using System.ComponentModel.DataAnnotations
+@using SERVICE.Contracts
 <h3>Register</h3>
+
 
 <EditForm Model="@userModel" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
@@ -38,40 +40,61 @@
 @code {
     [Inject]
     public HttpClient httpclient { get; set; }
+    [Inject]
+    public AuthUserEngine? authUserEngine { get; set; }
+    User userModel = new();
+    [Inject]
+    NavigationManager? navigationManager { get; set; }
 
-    // Kullanıcı Modeli
-    UserModel userModel = new();
 
-    private async Task HandleSubmit()
+
+
+
+
+
+
+    public async Task HandleSubmit() 
     {
-        try
-        {
-            // Kullanıcı Modelini JSON formatına çevir
-            var jsonContent = new StringContent(
-                System.Text.Json.JsonSerializer.Serialize(userModel),
-                System.Text.Encoding.UTF8,
-                "application/json"
-            );
-
-            // HTTP POST isteği gönder
-            var response = await httpclient.PostAsync("Auth/Register", jsonContent);
-
-            // Yanıtın durumunu kontrol et
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Kayıt başarılı!");
-            }
-            else
-            {
-                var errorMessage = await response.Content.ReadAsStringAsync();
-                Console.WriteLine($"Hata: {errorMessage}");
-            }
+        var res= await authUserEngine.Register(userModel);
+        if(res==false){
+            navigationManager.NavigateTo("/login");
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Bir hata oluştu: {ex.Message}");
-        }
-    }
+    
+    } 
+
+
+
+
+
+    // private async Task HandleSubmit()
+    // {
+    //     try
+    //     {
+    //         // Kullanıcı Modelini JSON formatına çevir
+    //         var jsonContent = new StringContent(
+    //             System.Text.Json.JsonSerializer.Serialize(userModel),
+    //             System.Text.Encoding.UTF8,
+    //             "application/json"
+    //         );
+
+    //         // // HTTP POST isteği gönder
+    //         // var response = await httpclient.PostAsync("Auth/Register", jsonContent);
+
+    //         // // Yanıtın durumunu kontrol et
+    //         // if (response.IsSuccessStatusCode)
+
+
+    //         else
+    //         {
+    //             var errorMessage = await response.Content.ReadAsStringAsync();
+    //             Console.WriteLine($"Hata: {errorMessage}");
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine($"Bir hata oluştu: {ex.Message}");
+    //     }
+    // }
 
     // Kullanıcı Modeli Sınıfı
     public class UserModel

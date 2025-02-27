@@ -1,0 +1,56 @@
+﻿@using COMMON.Models
+@using SERVICE.Contracts
+
+@inject UserState userState
+@inject BookUserEngine bookUserEngine
+<h3>@(isFollowedList ? "Takip Edilenler" : "Takipçiler")</h3>
+
+@if (users != null && users.Any())
+{
+    <div class="d-flex flex-column justify-content-center alihn-items-center">
+        @foreach (var user in users)
+        {
+            <div class="card" style="width: 5rem;border-radius:50px">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"> @user.Username </h5>
+                    <a href="#" class="btn btn-primary">Go to the Profile</a>
+                    <button @onclick="()=> ToggleFollow(user)" >
+                        @(user.IsFollowed ? "Unfollow" : "Follow")
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h4> No user can be found</h4>
+}
+
+
+@code {
+
+    [Parameter]
+    public bool isFollowedList { get; set; }
+    [Parameter]
+    public List<UserListModel> users { get; set; } = new();
+
+  
+    private async Task ToggleFollow(UserListModel user){
+        user.IsFollowed = !user.IsFollowed;
+        if (!user.IsFollowed && isFollowedList)
+        {  
+            users.Remove(user);
+            userState.FollowedCount -= 1;
+            await bookUserEngine.UpdateUserList(userState.Id, user, true);
+
+
+
+        }else{
+            users.Add(user);
+            userState.FollowedCount += 1;
+            await bookUserEngine.UpdateUserList(userState.Id, user, true);
+        }
+    }
+}

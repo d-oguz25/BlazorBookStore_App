@@ -5,6 +5,7 @@
 @using SERVICE.Contracts
 @using static SERVICE.Contracts.AuthUserEngine
 
+
 <h3>Login</h3>
 @inject UserState userState
 @inject AuthUserEngine userEngine
@@ -33,26 +34,36 @@
 
 @if (errorMessage != null)
 {
-    <div class="alert alert-danger">@errorMessage</div>
+    <div class="alert alert-danger">@errorMessage</div> 
 }
 
+<CustomWarningToast showToast=toastRes Message=errorMessage> </CustomWarningToast>
+
+
+
+
 @code {
+    public bool toastRes;
     private LoggedUser loginModel = new();
     private string? errorMessage;
+    [Inject]
+    NavigationManager navigationManager{ get; set; }
 
     private async Task HandleLogin()
     {
-        LoginUser currentUser = userEngine.Login(loginModel);
-        if(currentUser.loggedUser.IsAuthenticated){
+        LoggedUser currentUser = userEngine.Login(loginModel);
+        if(currentUser.IsAuthenticated){
+            userState.SetUser(currentUser);
 
-       userState.SetUser(currentUser.loggedUser);   
+        }else{
+            errorMessage = "You have logged in incorrectly. Try Again";
+            toastRes = true;
         }
-       
-
-        await localStorage.SetItemAsync("user", "");
+        await localStorage.SetItemAsync("user", currentUser);
+        navigationManager.NavigateTo("/home");
     }
 
-    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    
 
 
 }

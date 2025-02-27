@@ -1,38 +1,50 @@
 ﻿<h3>myProfile</h3>
 @page "/myAccount"
-@inject UserState userState
-
-<MudCard Class="profile-card">
-    <MudCardContent>
-        <MudAvatar Size="Size.Large" Image="https://via.placeholder.com/150" Alt="User Image" Class="profile-avatar" />
-        <h2 class="profile-name"> @userState.UserName </h2>
-        <p class="profile-bio">
-            Kitapsever, yazar ve edebiyat tutkunu. Tarih ve bilim kurgu kitaplarına bayılır.
-        </p>
-        <MudDivider />
-        <MudGrid>
-            <MudItem xs="6">
-                <p class="profile-stats"><strong>Takipçiler:</strong> 1200</p>
-            </MudItem>
-            <MudItem xs="6">
-                <p class="profile-stats"><strong>Takip Edilen:</strong> 340</p>
-            </MudItem>
-        </MudGrid>
-        <MudDivider />
-        <MudButton Variant="Variant.Outlined" Color="Color.Primary" >Profili Düzenle</MudButton>
-    </MudCardContent>
-
-    
-
-</MudCard>
+@using COMMON.Models
+@using SERVICE.Contracts
 
 
 
+<MudContainer>
+    <MudGrid>
+        <MudItem xs="6">
+            <MudButton Color="Color.Primary" OnClick="()=> ShowList(true)">
+                <strong>@userState.FollowedCount</strong> Takip Edilenler
+            </MudButton>
+        </MudItem>
+        <MudItem xs="6">
+            <MudButton Color="Color.Primary" OnClick="()=> ShowList(false)">
+                <strong>@userState.FollowerCount</strong> Takipçiler
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 
+    <UserListComponent Users="(isFollowedL33ist ? FollowedUsers : FollowerUsers)" IsFollowedList="isFollowedList" />
+</MudContainer>
 
 
 
 
 @code {
+    [Inject]
+    BookUserEngine? bookUserEngine { get; set; }
+    [Inject]
+    UserState userState { get; set; } = new();
+
+    private bool isFollowedList=false;         
+    private List<UserListModel> FollowedUsers = new();
+    private List<UserListModel> FollowerUsers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        FollowedUsers = await bookUserEngine.GetFollowedUsers(userState.Id);
+
+        FollowerUsers = await bookUserEngine.GetFollowerUsers(userState.Id);
+    }
+
+    private void ShowList(bool showFollowed){
+        isFollowedList = showFollowed;
+    }
 
 }

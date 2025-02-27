@@ -1,0 +1,48 @@
+﻿if(@showToast){
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+    <div class="toast show text-white bg-danger" role="alert">
+        <div class="toast-header">
+            <button type="button" class="btn-close" @onclick="CloseToast"></button>
+        </div>
+        <div class="toast-body">
+            @Message
+        </div>
+    </div>
+</div>
+}
+  
+
+
+
+
+@code {
+    [Parameter]
+    public string? Message { get; set; }
+    [Parameter]
+    public Boolean showToast { get; set; } = false;
+
+}
+
+
+
+
+
+@code {
+
+    private void ShowToast()
+    {
+        showToast = true;
+        StateHasChanged();
+
+        Task.Delay(3000).ContinueWith(_ =>
+        {
+            showToast = false;
+            InvokeAsync(StateHasChanged);
+        });
+    }
+
+    private void CloseToast()
+    {
+        showToast = false;
+    }
+}

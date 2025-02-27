@@ -20,9 +20,9 @@ namespace DAL.Implemetation
             dbSet = _db.Set<T>();
         }
 
-        public T GetById(int id)
-        {
-            return dbSet.Find(id);
+        public async Task<T> GetById(int id)
+        {  
+            return await dbSet.FindAsync(id);
         }
         public void Add(T entity)
         {
@@ -35,18 +35,43 @@ namespace DAL.Implemetation
             _db.Remove<T>(Entity);
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>>? filter = null, Func<IQueryable<T>, Func<IOrderedQueryable>>? orderBy = null, string? includeProperties = "")
+        public IQueryable<T> GetAll(
+           Expression<Func<T, bool>>? filter = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+           string? includeProperties = null)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (includeProperties != null)
+            {
+                foreach (var item in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    query = query.Include(item);
+                }
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
         }
+
+
 
         public void Update(T Entity)
         {
             _db.Update(Entity);
         }
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            _db.SaveChanges();
+            _db.SaveChangesAsync();
         }
     }
 }

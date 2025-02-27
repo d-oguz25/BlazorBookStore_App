@@ -5,6 +5,7 @@ using SERVICE.Contracts;
 using AutoMapper;
 using BlazorBookStore_App.Components.Models;
 using Blazored.LocalStorage;
+using Blazored.Toast;
 
 
 
@@ -17,13 +18,14 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddBlazoredModal();
+builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton< FavouriteBooksState>();
 builder.Services.AddSingleton<UserState>();
 builder.Services.AddScoped<IUserBusinessEngine,UserBusinessEngine>();
 builder.Services.AddScoped<ICommentUserEngine, CommentUserEngine>();
 builder.Services.AddScoped<IBookUserEngine, BookUserEngine>();
 builder.Services.AddScoped<IAuthUserEngine,AuthUserEngine>();
-builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(UserPersonalProfile));
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

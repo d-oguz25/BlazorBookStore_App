@@ -16,7 +16,10 @@ namespace DAL.Implemetation
             books= new BookRepository(_db);
             comments= new CommentRepository(_db);
             users= new BookStoreUserRepository(_db);
-            
+            following_list=new FollowerRepository(_db);
+            logged_user = new LoggedUserRepository(_db);
+
+
         }
         public IBookRepository books { get; set; }
 
@@ -24,6 +27,8 @@ namespace DAL.Implemetation
 
         public IBookStoreUserRepository users { get; set; }
 
-      
+        public IFollowerRepository following_list { get; set; }
+
+        public ILoggedUserRepository logged_user { get; set; }
     }
 }

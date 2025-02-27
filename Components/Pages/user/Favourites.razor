@@ -3,6 +3,7 @@
 @using BlazorBookStore_App.Components.Services
 
 @inject FavouriteBooksState favouriteBooksState
+@inject UserState userState
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">Favorite Books</h2>
@@ -18,7 +19,7 @@
                             <h5 class="card-title">@book.Title</h5>
                             <p class="card-text text-muted">@book.Author</p>
                             <p class="card-text">@book.Description</p>
-                            <button class="btn btn-danger" @onclick="() => RemoveFromFavorites(book)">Remove from Favorite</button>
+                            <button class="btn btn-danger" @onclick="() => RemoveFromFavorites(book)">Remove from Favorite </button>
                         </div>
                     </div>
                 </div>
@@ -37,7 +38,7 @@
 
 
 
-    private void RemoveFromFavorites(BookModel book){
+    private void RemoveFromFavorites(Book book){
         favouriteBooksState.FavouriteBooks.Remove(book);
 
     }
