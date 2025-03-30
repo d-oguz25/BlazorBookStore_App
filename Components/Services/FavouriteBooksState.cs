@@ -2,8 +2,7 @@
 
 namespace BlazorBookStore_App.Components.Services
 {
-    // bir State Container oluşturabilirsiniz. Bu, bir servis dosyası kullanarak bir Singleton
-    // içinde durumu saklamak anlamına gelir.
+
     public class FavouriteBooksState
     {
         public List<Book> FavouriteBooks { get; private set; } = new();

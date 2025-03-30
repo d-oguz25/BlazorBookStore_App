@@ -16,6 +16,8 @@
 <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator /> 
     <ValidationSummary />
+    @if (!codeSent)
+{
 
     <div> 
         <label for="username">Kullanıcı Adı:</label>
@@ -27,9 +29,18 @@
         <label for="password">Şifre:</label>
         <InputText id="password" type="password" @bind-Value="loginModel.Password" class="form-control" />
         <ValidationMessage For="@(() => loginModel.Password)" />
+            <button type="submit" class="btn btn-primary">Giriş Yap</button>
     </div>
+}else{
 
-    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+    <div>
+        <label>Doğrulama Kodu</label>
+        <input @bind="verificationCode" type="text" class="form-control" />
+
+        <button @onclick="HandleVerification" class="btn btn-success">Doğrula</button>
+    </div>
+}
+  
 </EditForm>
 
 @if (errorMessage != null)
@@ -40,30 +51,39 @@
 <CustomWarningToast showToast=toastRes Message=errorMessage> </CustomWarningToast>
 
 
-
-
-@code {
+    @code {
     public bool toastRes;
     private LoggedUser loginModel = new();
     private string? errorMessage;
+    private string verificationCode { get; set; } = "123456";
+    private bool codeSent = false;
     [Inject]
-    NavigationManager navigationManager{ get; set; }
+    NavigationManager navigationManager { get; set; }
 
     private async Task HandleLogin()
     {
-        LoggedUser currentUser = userEngine.Login(loginModel);
-        if(currentUser.IsAuthenticated){
-            userState.SetUser(currentUser);
+        var loginSuccess = await userEngine.Login(loginModel);
+        if (!loginSuccess)
+        {
+            errorMessage = "giriş başarısız";
 
-        }else{
-            errorMessage = "You have logged in incorrectly. Try Again";
-            toastRes = true;
+        }
+        codeSent = true;
+    }
+
+    private async Task HandleVerification()
+    {
+        var currentUser = await userEngine.VerifyLoginCode(loginModel, verificationCode);
+        if (currentUser?.IsAuthenticated == true)
+        {
+            userState.SetUser(currentUser);
         }
         await localStorage.SetItemAsync("user", currentUser);
         navigationManager.NavigateTo("/home");
+
     }
 
-    
+
 
 
 }

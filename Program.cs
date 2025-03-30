@@ -6,6 +6,8 @@ using AutoMapper;
 using BlazorBookStore_App.Components.Models;
 using Blazored.LocalStorage;
 using Blazored.Toast;
+using COMMON.PocoClasses;
+using COMMON.Services;
 
 
 
@@ -15,8 +17,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddScoped<EmailSender>();
 builder.Services.AddBlazoredModal();
 builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton< FavouriteBooksState>();

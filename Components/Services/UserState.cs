@@ -19,11 +19,13 @@ public class UserState
 
     public int Id { get; set; }
     public bool IsAuthenticated { get; private set; }
+    public string? FirstName { get; private set; }
+    public string? LastName { get; private set; }
     public string UserName { get; private set; } = string.Empty;
     public string Token { get; private set; } = string.Empty;
     public string? Password { get; set; }
-    public string Bio { get; set; } 
-    public string City { get; set; }
+    public string? Bio { get; set; } 
+    public string? City { get; set; }
     public int FollowerCount { get; set; } = 0;
     public int FollowedCount { get; set; } = 0;
     public ICollection<UserListModel> Followers { get; set; } = new List<UserListModel>();

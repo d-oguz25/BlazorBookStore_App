@@ -1,5 +1,41 @@
-﻿<h3>Settings</h3>
+﻿@page "/userSettings"
+@using BlazorBookStore_App.Components.Models
+@using SERVICE.Contracts
+@inject UserState userState
+@inject IAuthUserEngine _engine ;
+<div class="settings-form">
+    <label>First Name:</label>
+    <input type="text" value="@userState.FirstName" readonly />
+
+    <label>Last Name:</label>
+    <input type="text" value="@userState.LastName" readonly />
+
+    <label>Username:</label>
+    <input type="text" @bind="userSettingsModel.UserName" />
+
+    <label>Password:</label>
+    <input type="password" @bind="newPassword" />
+
+    <label>Bio:</label>
+    <textarea @bind="userSettingsModel.Bio"></textarea>
+    <label>City:</label>
+    <input type="text" @bind="userSettingsModel.City" />
+
+    <button onclick="SaveChanges">Save Changes</button>
+</div>
+
 
 @code {
+    public string? newPassword { get; set; }
+    public UserPersonalProfile userSettingsModel { get; set; } = new();
+    private async Task SaveChanges(UserPersonalProfile userSettingsModel)
+    {
+        if (userSettingsModel.Password != null || userSettingsModel.UserName != null || userSettingsModel.City != null)
+        {
+            throw new ArgumentNullException("Argument Null Exception");
+
+        }
+        await this._engine.UpdateUserSettings(userSettingsModel, newPassword);
+    }
 
 }

@@ -18,6 +18,7 @@ namespace DAL.Implemetation
             users= new BookStoreUserRepository(_db);
             following_list=new FollowerRepository(_db);
             logged_user = new LoggedUserRepository(_db);
+            userSettings = new UserSettingsRepository(_db);
 
 
         }
@@ -30,5 +31,7 @@ namespace DAL.Implemetation
         public IFollowerRepository following_list { get; set; }
 
         public ILoggedUserRepository logged_user { get; set; }
+
+        public IUserSettingsRepository userSettings { get; set}
     }
 }
