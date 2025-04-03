@@ -32,6 +32,6 @@ namespace DAL.Implemetation
 
         public ILoggedUserRepository logged_user { get; set; }
 
-        public IUserSettingsRepository userSettings { get; set}
+        public IUserSettingsRepository userSettings { get; set; }
     }
 }

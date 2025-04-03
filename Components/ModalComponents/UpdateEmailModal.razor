@@ -1,0 +1,71 @@
+﻿@page "/confirm";
+@using SERVICE.Contracts
+@inject BookUserEngine _engine
+@inject UserState userState;
+
+<div>
+    @if (!codeSent)
+    {
+        <label>New Email</label>
+        <InputText @bind-value="newEmail"></InputText>
+        <button @onclick="SendVerificationCode" class="btn btn-primary">Send Code</button>
+
+    }
+    else
+    {
+        <div>
+            <label>Verification Code</label>
+            <InputText @bind-value="verificationCode"></InputText>
+            <button @onclick="HandleVerification" class="btn btn-success">Verify</button>
+        </div>
+    }
+</div>
+
+@code {
+    private string verificationCode { get; set; } = string.Empty;
+    private bool codeSent = false;
+    private string newEmail { get; set; } = string.Empty;
+    [Inject]
+    private NavigationManager navigator{ get; set; }
+    [Inject]
+    private HttpClient httpClient{ get; set; }
+
+
+
+
+
+    public async Task SendVerificationCode()
+    {
+        var res = await _engine.SendVerificationCode(userState.Id, newEmail);
+        if (res)
+        {
+            codeSent = true;
+        }
+    }
+
+    public async Task HandleVerification()
+    {
+
+        var uri = navigator.Uri;
+        var query = new Uri(uri).Query;
+        var paramaters = System.Web.HttpUtility.ParseQueryString(query);
+
+        string userId = paramaters["userId"];
+
+        if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(verificationCode))
+        {
+            var res = await _engine.VerifySettingsCode(Convert.ToInt32(userId), verificationCode);
+            if (res)
+            {
+
+                codeSent = false;
+                navigator.NavigateTo("/login");
+            }
+            else
+            {
+                Console.WriteLine("error");
+            }
+        }
+    }
+
+}

@@ -2,7 +2,7 @@
 @using BlazorBookStore_App.Components.Models
 @using SERVICE.Contracts
 @inject UserState userState
-@inject IAuthUserEngine _engine ;
+@inject IBookUserEngine _engine ;
 <div class="settings-form">
     <label>First Name:</label>
     <input type="text" value="@userState.FirstName" readonly />
@@ -12,15 +12,19 @@
 
     <label>Username:</label>
     <input type="text" @bind="userSettingsModel.UserName" />
+    <label>Username:</label>
+    <button  @bind="changeEmailModal" />
 
-    <label>Password:</label>
-    <input type="password" @bind="newPassword" />
+
 
     <label>Bio:</label>
     <textarea @bind="userSettingsModel.Bio"></textarea>
     <label>City:</label>
     <input type="text" @bind="userSettingsModel.City" />
-
+    if(isEmailWillChange){
+        <UpdateEmailModal> </UpdateEmailModal>
+    }
+     
     <button onclick="SaveChanges">Save Changes</button>
 </div>
 
@@ -28,14 +32,25 @@
 @code {
     public string? newPassword { get; set; }
     public UserPersonalProfile userSettingsModel { get; set; } = new();
+    public bool isEmailWillChange { get; set; } = false;
+
+
     private async Task SaveChanges(UserPersonalProfile userSettingsModel)
     {
-        if (userSettingsModel.Password != null || userSettingsModel.UserName != null || userSettingsModel.City != null)
+        if (userSettingsModel==null)
         {
             throw new ArgumentNullException("Argument Null Exception");
 
         }
         await this._engine.UpdateUserSettings(userSettingsModel, newPassword);
     }
+
+
+    public void changeEmailModal(){
+    isEmailWillChange =true;
+     
+    }
+
+
 
 }
